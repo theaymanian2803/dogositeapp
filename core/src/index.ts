@@ -6,3 +6,4 @@ export * from "./whatsapp";
 export * from "./settings";
 export * from "./webSchema";
 export * from "./schemas";
+export * from "./i18n";
