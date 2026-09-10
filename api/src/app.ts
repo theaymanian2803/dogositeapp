@@ -3,6 +3,7 @@ import { cors } from "hono/cors";
 import type { Client } from "@libsql/client";
 import { ensureApiTablesOnce } from "./schema";
 import { registerCatalogRoutes } from "./routes/catalog";
+import { registerReviewRoutes } from "./routes/reviews";
 
 export type AppConfig = {
   jwtSecret: string;
@@ -27,6 +28,7 @@ export function createApp(db: Client, config: AppConfig): Hono {
   app.get("/health", (c) => c.json({ ok: true }));
 
   registerCatalogRoutes(app, db);
+  registerReviewRoutes(app, db);
 
   return app;
 }
