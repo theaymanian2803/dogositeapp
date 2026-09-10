@@ -1,5 +1,7 @@
+import { View } from "react-native";
 import { Screen } from "../../components/ui/Screen";
 import { Loading } from "../../components/ui/Loading";
+import { FloatingWhatsApp } from "../../components/FloatingWhatsApp";
 import { useSettings } from "../../lib/queries";
 import { parseHomepageSections } from "../../lib/homeSections";
 import { HeroSection } from "../../components/home/HeroSection";
@@ -25,11 +27,14 @@ export default function HomeScreen() {
   const merged = { ...defaultSettings, ...(settings ?? {}) };
   const sections = parseHomepageSections(merged.homepage_sections);
   return (
-    <Screen>
-      {sections.map((id) => {
-        const Section = RENDERERS[id];
-        return <Section key={id} settings={merged} />;
-      })}
-    </Screen>
+    <View style={{ flex: 1 }}>
+      <Screen>
+        {sections.map((id) => {
+          const Section = RENDERERS[id];
+          return <Section key={id} settings={merged} />;
+        })}
+      </Screen>
+      <FloatingWhatsApp settings={merged} />
+    </View>
   );
 }
