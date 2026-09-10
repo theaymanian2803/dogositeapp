@@ -30,7 +30,7 @@ export function ProductsSection({ settings }: { settings: Settings }) {
             key={product.id}
             onPress={() => router.push(`/product/${product.slug}`)}
             style={{
-              width: "48%",
+              width: "47%",
               backgroundColor: colors.card,
               borderColor: colors.border,
               borderWidth: 1,
