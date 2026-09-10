@@ -63,7 +63,9 @@
     "web": "expo start --web",
     "lint": "expo lint",
     "typecheck": "tsc --noEmit",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "build:client": "eas build --profile production --platform all",
+    "update:client": "eas update --branch production"
   },
   "jest": {
     "preset": "jest-expo",
