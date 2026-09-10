@@ -170,12 +170,12 @@ export default function AdminProductFormScreen() {
         <Text style={{ color: colors.foreground, fontWeight: "500" }}>{t("admin.products.category")}</Text>
         <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 10 }}>
           {categories.map((cat) => {
-            const active = category === cat.name;
+            const active = category === cat.slug;
             return (
               <Pressable
                 key={cat.id}
                 accessibilityRole="button"
-                onPress={() => setCategory(cat.name)}
+                onPress={() => setCategory(cat.slug)}
                 style={{
                   backgroundColor: active ? colors.accent : colors.secondary,
                   borderRadius: 9999,

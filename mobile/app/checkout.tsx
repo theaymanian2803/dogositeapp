@@ -1,7 +1,7 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Image } from "expo-image";
 import { router } from "expo-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Text, View } from "react-native";
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE, shippingFor } from "@petpals/core";
 import { Button } from "../components/ui/Button";
@@ -22,6 +22,7 @@ export default function CheckoutScreen() {
   const { t } = useI18n();
   const { colors } = useTheme();
   const createOrder = useCreateOrder();
+  const submittedRef = useRef(false);
   const [form, setForm] = useState<CheckoutForm>(emptyForm);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState("");
@@ -45,6 +46,8 @@ export default function CheckoutScreen() {
   }
 
   async function handleSubmit() {
+    if (submittedRef.current) return;
+    submittedRef.current = true;
     const nextErrors = validateCheckout(form);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
@@ -74,7 +77,7 @@ export default function CheckoutScreen() {
   }
 
   return (
-    <Screen>
+    <Screen keyboardShouldPersistTaps="handled">
       <Text style={{ color: colors.foreground, fontSize: 22, fontWeight: "700" }}>
         {t("checkout.title")}
       </Text>

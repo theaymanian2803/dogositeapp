@@ -1,4 +1,5 @@
 import { router, Tabs } from "expo-router";
+import { useQueryClient } from "@tanstack/react-query";
 import { Boxes, LayoutGrid, Package, Star } from "lucide-react-native";
 import { useEffect } from "react";
 import { Pressable, Text } from "react-native";
@@ -11,12 +12,14 @@ export default function AdminTabsLayout() {
   const { t } = useI18n();
   const { colors } = useTheme();
   const { signOut } = useAdminSession();
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     registerForPushNotifications().catch(() => {});
   }, []);
 
   async function handleSignOut() {
+    queryClient.removeQueries({ queryKey: ["admin"] });
     await signOut();
     router.replace("/");
   }
