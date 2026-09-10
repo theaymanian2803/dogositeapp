@@ -1,0 +1,22 @@
+{
+  "name": "@petpals/api",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "tsx watch src/dev-server.ts",
+    "test": "vitest run",
+    "seed": "tsx scripts/seed.ts"
+  },
+  "dependencies": {
+    "@libsql/client": "*",
+    "@petpals/core": "*",
+    "hono": "*",
+    "zod": "*"
+  },
+  "devDependencies": {
+    "@hono/node-server": "*",
+    "tsx": "*",
+    "typescript": "*",
+    "vitest": "*"
+  }
+}
