@@ -27,7 +27,7 @@ export function registerAdminOrderRoutes(
     if (!parsed.success) return c.json({ error: "Invalid status" }, 400);
     const result = await db.execute({
       sql: "UPDATE orders SET status = ? WHERE id = ?",
-      args: [parsed.data.status, c.req.param("id")],
+      args: [parsed.data.status, c.req.param("id")!],
     });
     if (result.rowsAffected === 0) return c.json({ error: "Order not found" }, 404);
     return c.json({ ok: true });
@@ -36,7 +36,7 @@ export function registerAdminOrderRoutes(
   app.delete("/admin/orders/:id", guard, async (c) => {
     const result = await db.execute({
       sql: "DELETE FROM orders WHERE id = ?",
-      args: [c.req.param("id")],
+      args: [c.req.param("id")!],
     });
     if (result.rowsAffected === 0) return c.json({ error: "Order not found" }, 404);
     return c.body(null, 204);

@@ -23,7 +23,7 @@ export function registerAdminReviewRoutes(
     if (!parsed.success) return c.json({ error: "Invalid status" }, 400);
     const result = await db.execute({
       sql: "UPDATE reviews SET status = ? WHERE id = ?",
-      args: [parsed.data.status, c.req.param("id")],
+      args: [parsed.data.status, c.req.param("id")!],
     });
     if (result.rowsAffected === 0) return c.json({ error: "Review not found" }, 404);
     return c.json({ ok: true });
@@ -32,7 +32,7 @@ export function registerAdminReviewRoutes(
   app.delete("/admin/reviews/:id", guard, async (c) => {
     const result = await db.execute({
       sql: "DELETE FROM reviews WHERE id = ?",
-      args: [c.req.param("id")],
+      args: [c.req.param("id")!],
     });
     if (result.rowsAffected === 0) return c.json({ error: "Review not found" }, 404);
     return c.body(null, 204);

@@ -30,7 +30,7 @@ export function registerAdminCategoryRoutes(
   app.delete("/admin/categories/:id", guard, async (c) => {
     const result = await db.execute({
       sql: "DELETE FROM categories WHERE id = ?",
-      args: [c.req.param("id")],
+      args: [c.req.param("id")!],
     });
     if (result.rowsAffected === 0) return c.json({ error: "Category not found" }, 404);
     return c.body(null, 204);

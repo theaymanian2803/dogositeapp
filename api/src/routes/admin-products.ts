@@ -54,7 +54,7 @@ export function registerAdminProductRoutes(
         p.category,
         p.badge ?? null,
         p.tag ?? null,
-        c.req.param("id"),
+        c.req.param("id")!,
       ],
     });
     if (result.rowsAffected === 0) return c.json({ error: "Product not found" }, 404);
@@ -64,7 +64,7 @@ export function registerAdminProductRoutes(
   app.delete("/admin/products/:id", guard, async (c) => {
     const result = await db.execute({
       sql: "DELETE FROM products WHERE id = ?",
-      args: [c.req.param("id")],
+      args: [c.req.param("id")!],
     });
     if (result.rowsAffected === 0) return c.json({ error: "Product not found" }, 404);
     return c.body(null, 204);
