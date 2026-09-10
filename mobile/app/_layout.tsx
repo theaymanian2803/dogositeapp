@@ -7,7 +7,15 @@ export default function RootLayout() {
   return (
     <AppProviders>
       <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }} />
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" />
+        <Stack.Screen name="product/[slug]" />
+        <Stack.Screen name="category/[category]" />
+        <Stack.Screen name="checkout" />
+        <Stack.Screen name="order-confirmed" />
+        <Stack.Screen name="info/[page]" />
+        <Stack.Screen name="admin" />
+      </Stack>
     </AppProviders>
   );
 }

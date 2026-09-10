@@ -158,4 +158,6 @@ export const fr: Dict = {
   "product.imageLink": ".ou collez un lien d'image",
   "category.empty": "Aucun produit dans cette catégorie pour le moment.",
   "lang.label": "Langue",
+  "i18n.restartTitle": "Redémarrage requis",
+  "i18n.restartMessage": "Veuillez redémarrer l'application pour appliquer le sens d'affichage.",
 };

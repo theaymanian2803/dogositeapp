@@ -155,4 +155,6 @@ export const en: Dict = {
   "product.imageLink": ".or paste an image link",
   "category.empty": "No products yet in this category.",
   "lang.label": "Language",
+  "i18n.restartTitle": "Restart required",
+  "i18n.restartMessage": "Please restart the app to apply the layout direction.",
 };

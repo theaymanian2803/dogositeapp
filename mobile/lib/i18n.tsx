@@ -23,7 +23,8 @@ async function applyRtl(next: Lang): Promise<void> {
     if (__DEV__) DevSettings.reload();
     else await Updates.reloadAsync();
   } catch {
-    Alert.alert("Restart required", "Please restart the app to apply the layout direction.");
+    const t = makeT(getDict(next));
+    Alert.alert(t("i18n.restartTitle"), t("i18n.restartMessage"));
   }
 }
 

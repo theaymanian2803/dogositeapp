@@ -154,4 +154,6 @@ export const ar: Dict = {
   "product.imageLink": ".أو الصق رابط صورة",
   "category.empty": "لا توجد منتجات في هذا التصنيف بعد.",
   "lang.label": "اللغة",
+  "i18n.restartTitle": "إعادة التشغيل مطلوبة",
+  "i18n.restartMessage": "يرجى إعادة تشغيل التطبيق لتطبيق اتجاه العرض.",
 };
