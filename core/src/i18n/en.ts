@@ -68,6 +68,7 @@ export const en: Dict = {
   "checkout.place": "Place order",
   "checkout.placing": "Placing order…",
   "checkout.whatsapp": "Order via WhatsApp",
+  "checkout.error": "Couldn't place your order. Please try again.",
   "checkout.empty": "Your cart is empty.",
   "checkout.back": "Back to store",
   "checkout.haveAccount": "Have an account?",

@@ -69,6 +69,7 @@ export const fr: Dict = {
   "checkout.place": "Passer la commande",
   "checkout.placing": "Commande en cours…",
   "checkout.whatsapp": "Commander via WhatsApp",
+  "checkout.error": "Impossible de passer la commande. Veuillez réessayer.",
   "checkout.empty": "Votre panier est vide.",
   "checkout.back": "Retour à la boutique",
   "checkout.haveAccount": "Vous avez un compte ?",

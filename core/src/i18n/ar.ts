@@ -67,6 +67,7 @@ export const ar: Dict = {
   "checkout.place": "تأكيد الطلب",
   "checkout.placing": "جاري التأكيد…",
   "checkout.whatsapp": "الطلب عبر واتساب",
+  "checkout.error": "تعذر تأكيد الطلب. يرجى المحاولة مرة أخرى.",
   "checkout.empty": "سلتك فارغة.",
   "checkout.back": "العودة إلى المتجر",
   "checkout.haveAccount": "لديك حساب؟",
