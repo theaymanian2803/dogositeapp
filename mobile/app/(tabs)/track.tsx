@@ -11,6 +11,7 @@ import { Screen } from "../../components/ui/Screen";
 import { useI18n } from "../../lib/i18n";
 import { useTrackOrders } from "../../lib/queries";
 import { useTheme } from "../../theme/theme";
+import { LanguageSwitcher } from "../../components/LanguageSwitcher";
 
 const TIMELINE = ["new", "processing", "shipped", "delivered"] as const;
 
@@ -249,6 +250,8 @@ export default function TrackScreen() {
           </View>
         </View>
       ) : null}
+
+      <LanguageSwitcher />
 
       <Pressable
         accessibilityRole="link"
