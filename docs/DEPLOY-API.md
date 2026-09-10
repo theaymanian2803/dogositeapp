@@ -10,7 +10,9 @@
 4. Deploy: `vercel --prod` (or connect the repo).
 5. Create a cron job at cron-job.org (free) calling
    `https://<api-host>/cron/new-orders?secret=<CRON_SECRET>` every 1 minute.
-6. Verify: `GET https://<api-host>/health` returns `{"ok":true}`.
-7. Smoke test: `GET https://<api-host>/health` returns `{"ok":true}`; sign in as admin and place a test order through the app.
+6. Smoke test: `GET https://<api-host>/health` returns `{"ok":true}`; sign in as
+   admin (admin@gmail.com / admin123 after seeding) and place a test order through
+   the app.
 
-The seed script is designed for a fresh client database; re-running it duplicates products/orders/reviews.
+The seed script is designed for a fresh client database; re-running it duplicates
+products and orders (reviews are guarded by an existence check).
