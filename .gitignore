@@ -10,3 +10,4 @@ dist
 *.db-wal
 api/api/index.js
 !.env.example
+web/
