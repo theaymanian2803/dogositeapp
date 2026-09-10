@@ -1,14 +1,20 @@
 import { router, Tabs } from "expo-router";
 import { Boxes, LayoutGrid, Package, Star } from "lucide-react-native";
+import { useEffect } from "react";
 import { Pressable, Text } from "react-native";
 import { useAdminSession } from "../../../lib/adminSession";
 import { useI18n } from "../../../lib/i18n";
+import { registerForPushNotifications } from "../../../lib/push";
 import { useTheme } from "../../../theme/theme";
 
 export default function AdminTabsLayout() {
   const { t } = useI18n();
   const { colors } = useTheme();
   const { signOut } = useAdminSession();
+
+  useEffect(() => {
+    registerForPushNotifications().catch(() => {});
+  }, []);
 
   async function handleSignOut() {
     await signOut();
