@@ -11,6 +11,7 @@ import { registerAdminProductRoutes } from "./routes/admin-products";
 import { registerAdminCategoryRoutes } from "./routes/admin-categories";
 import { registerAdminReviewRoutes } from "./routes/admin-reviews";
 import { registerAdminPushRoutes } from "./routes/admin-push";
+import { registerCronRoutes } from "./routes/cron";
 
 export type AppConfig = {
   jwtSecret: string;
@@ -43,6 +44,7 @@ export function createApp(db: Client, config: AppConfig): Hono {
   registerAdminCategoryRoutes(app, db, config);
   registerAdminReviewRoutes(app, db, config);
   registerAdminPushRoutes(app, db, config);
+  registerCronRoutes(app, db, config);
 
   return app;
 }
