@@ -10,6 +10,7 @@ import { registerAdminOrderRoutes } from "./routes/admin-orders";
 import { registerAdminProductRoutes } from "./routes/admin-products";
 import { registerAdminCategoryRoutes } from "./routes/admin-categories";
 import { registerAdminReviewRoutes } from "./routes/admin-reviews";
+import { registerAdminPushRoutes } from "./routes/admin-push";
 
 export type AppConfig = {
   jwtSecret: string;
@@ -34,13 +35,14 @@ export function createApp(db: Client, config: AppConfig): Hono {
   app.get("/health", (c) => c.json({ ok: true }));
 
   registerCatalogRoutes(app, db);
-  registerOrderRoutes(app, db);
+  registerOrderRoutes(app, db, config);
   registerReviewRoutes(app, db);
   registerAdminAuthRoutes(app, db, config);
   registerAdminOrderRoutes(app, db, config);
   registerAdminProductRoutes(app, db, config);
   registerAdminCategoryRoutes(app, db, config);
   registerAdminReviewRoutes(app, db, config);
+  registerAdminPushRoutes(app, db, config);
 
   return app;
 }

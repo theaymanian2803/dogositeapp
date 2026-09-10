@@ -1,6 +1,8 @@
 import type { Hono } from "hono";
 import type { Client } from "@libsql/client";
 import { orderCreateSchema, type OrderCreateInput } from "@petpals/core";
+import { notifyOrder } from "../push";
+import type { AppConfig } from "../app";
 
 export async function insertOrder(db: Client, input: OrderCreateInput): Promise<string> {
   const id = crypto.randomUUID();
@@ -19,11 +21,12 @@ export async function insertOrder(db: Client, input: OrderCreateInput): Promise<
   return id;
 }
 
-export function registerOrderRoutes(app: Hono, db: Client): void {
+export function registerOrderRoutes(app: Hono, db: Client, config: AppConfig): void {
   app.post("/orders", async (c) => {
     const parsed = orderCreateSchema.safeParse(await c.req.json().catch(() => null));
     if (!parsed.success) return c.json({ error: "Invalid order" }, 400);
     const id = await insertOrder(db, parsed.data);
+    notifyOrder(db, id, config.fetchImpl).catch(() => {});
     return c.json({ id }, 201);
   });
 
