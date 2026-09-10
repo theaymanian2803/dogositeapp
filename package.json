@@ -1,0 +1,9 @@
+{
+  "name": "dogositeapp",
+  "private": true,
+  "workspaces": ["core", "api"],
+  "scripts": {
+    "test": "npm run test --workspaces --if-present",
+    "build:core": "npm run build -w @petpals/core"
+  }
+}
