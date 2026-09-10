@@ -47,11 +47,11 @@ export default function CheckoutScreen() {
 
   async function handleSubmit() {
     if (submittedRef.current) return;
-    submittedRef.current = true;
     const nextErrors = validateCheckout(form);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
     setSubmitError("");
+    submittedRef.current = true;
     try {
       const phone = form.phone.trim();
       await createOrder.mutateAsync({
@@ -72,6 +72,7 @@ export default function CheckoutScreen() {
       clear();
       router.replace(`/order-confirmed?phone=${encodeURIComponent(phone)}`);
     } catch (err) {
+      submittedRef.current = false;
       setSubmitError(err instanceof Error ? err.message : t("checkout.error"));
     }
   }
