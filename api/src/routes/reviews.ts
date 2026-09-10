@@ -13,8 +13,10 @@ export function registerReviewRoutes(app: Hono, db: Client): void {
     }
     let sql = `SELECT * FROM reviews WHERE ${conditions.join(" AND ")} ORDER BY created_at DESC`;
     if (limit) {
+      const n = Number(limit);
+      if (!Number.isInteger(n) || n <= 0) return c.json({ error: "Invalid limit" }, 400);
       sql += " LIMIT ?";
-      args.push(Number(limit));
+      args.push(n);
     }
     const rs = await db.execute({ sql, args });
     return c.json(rs.rows);

@@ -238,6 +238,11 @@ async function seed() {
   );
   const productIds = productRows.rows.map((r) => String(r.id));
   for (const [i, r] of sampleReviews.entries()) {
+    const existingReview = await turso.execute({
+      sql: "SELECT id FROM reviews WHERE user_name = ? AND title = ?",
+      args: [r.user_name, r.title],
+    });
+    if (existingReview.rows.length > 0) continue;
     await turso.execute({
       sql: "INSERT INTO reviews (id, product_id, user_id, user_name, rating, title, body, image_url, status) VALUES (?, ?, NULL, ?, ?, ?, ?, NULL, 'approved')",
       args: [crypto.randomUUID(), productIds[i] ?? null, r.user_name, r.rating, r.title, r.body],

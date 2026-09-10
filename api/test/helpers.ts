@@ -46,7 +46,3 @@ export async function loginAdmin(app: Hono): Promise<string> {
   const body = (await res.json()) as { token: string };
   return body.token;
 }
-
-export async function readJson<T>(res: Response): Promise<T> {
-  return (await res.json()) as T;
-}

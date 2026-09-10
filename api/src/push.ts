@@ -40,21 +40,30 @@ export async function notifyOrder(
   orderId: string,
   fetchImpl: typeof fetch = fetch,
 ): Promise<boolean> {
+  const tokensRs = await db.execute("SELECT token FROM push_tokens");
+  const tokens = tokensRs.rows.map((r) => String(r.token));
+  if (tokens.length === 0) return false;
+
   const claim = await db.execute({
     sql: "INSERT OR IGNORE INTO notified_orders (order_id) VALUES (?)",
     args: [orderId],
   });
   if (claim.rowsAffected === 0) return false;
 
-  const tokensRs = await db.execute("SELECT token FROM push_tokens");
-  const tokens = tokensRs.rows.map((r) => String(r.token));
-  const invalid = await sendExpoPush(
-    tokens,
-    { title: "New order", body: "You have a new order in the app" },
-    fetchImpl,
-  );
-  for (const token of invalid) {
-    await db.execute({ sql: "DELETE FROM push_tokens WHERE token = ?", args: [token] });
+  try {
+    const invalid = await sendExpoPush(
+      tokens,
+      { title: "New order", body: "You have a new order in the app" },
+      fetchImpl,
+    );
+    for (const token of invalid) {
+      await db.execute({ sql: "DELETE FROM push_tokens WHERE token = ?", args: [token] });
+    }
+    return true;
+  } catch (err) {
+    await db
+      .execute({ sql: "DELETE FROM notified_orders WHERE order_id = ?", args: [orderId] })
+      .catch(() => {});
+    throw err;
   }
-  return true;
 }

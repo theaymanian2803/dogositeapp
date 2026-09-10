@@ -19,6 +19,10 @@ beforeAll(async () => {
   }));
   await seedAdmin(db);
   token = await loginAdmin(app);
+  await db.execute({
+    sql: "INSERT INTO push_tokens (id, token, platform) VALUES (?, ?, ?)",
+    args: ["t1", "ExponentPushToken[abc]", "ios"],
+  });
 });
 
 const auth = () => ({ Authorization: `Bearer ${token}` });
@@ -54,6 +58,46 @@ describe("notifyOrder", () => {
   });
 });
 
+describe("notifyOrder without tokens", () => {
+  it("returns false and does not claim the order", async () => {
+    const fresh = createTestApp();
+    await fresh.app.request("/health");
+    const ok = await notifyOrder(
+      fresh.db,
+      "no-token-order",
+      fetchMock as unknown as typeof fetch,
+    );
+    expect(ok).toBe(false);
+    const row = await fresh.db.execute({
+      sql: "SELECT order_id FROM notified_orders WHERE order_id = ?",
+      args: ["no-token-order"],
+    });
+    expect(row.rows).toHaveLength(0);
+  });
+});
+
+describe("notifyOrder on push failure", () => {
+  it("rejects and leaves no claim row", async () => {
+    const fresh = createTestApp();
+    await fresh.app.request("/health");
+    await fresh.db.execute({
+      sql: "INSERT INTO push_tokens (id, token, platform) VALUES (?, ?, ?)",
+      args: ["t2", "ExponentPushToken[def]", "ios"],
+    });
+    const failing = vi.fn(async () => {
+      throw new Error("network down");
+    });
+    await expect(
+      notifyOrder(fresh.db, "fail-order", failing as unknown as typeof fetch),
+    ).rejects.toThrow("network down");
+    const row = await fresh.db.execute({
+      sql: "SELECT order_id FROM notified_orders WHERE order_id = ?",
+      args: ["fail-order"],
+    });
+    expect(row.rows).toHaveLength(0);
+  });
+});
+
 describe("order creation triggers a push", () => {
   it("calls Expo after an order is placed", async () => {
     fetchMock.mockClear();
@@ -70,7 +114,17 @@ describe("order creation triggers a push", () => {
       }),
     });
     expect(res.status).toBe(201);
-    await new Promise((r) => setTimeout(r, 50));
+    const { id } = (await res.json()) as { id: string };
+    let claimed = false;
+    for (let i = 0; i < 10 && !claimed; i++) {
+      await new Promise((r) => setTimeout(r, 50));
+      const row = await db.execute({
+        sql: "SELECT order_id FROM notified_orders WHERE order_id = ?",
+        args: [id],
+      });
+      claimed = row.rows.length > 0;
+    }
+    expect(claimed).toBe(true);
     expect(fetchMock).toHaveBeenCalledTimes(1);
   });
 });

@@ -51,4 +51,8 @@ describe("GET /reviews", () => {
     expect(res.status).toBe(200);
     expect(await res.json()).toEqual([]);
   });
+  it("rejects an invalid limit", async () => {
+    const res = await app.request("/reviews?limit=abc");
+    expect(res.status).toBe(400);
+  });
 });

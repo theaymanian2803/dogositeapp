@@ -60,6 +60,10 @@ describe("GET /products", () => {
     const body = await res.json();
     expect(body).toHaveLength(1);
   });
+  it("rejects an invalid limit", async () => {
+    const res = await app.request("/products?limit=abc");
+    expect(res.status).toBe(400);
+  });
 });
 
 describe("GET /products/:slug", () => {

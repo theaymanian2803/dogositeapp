@@ -22,12 +22,15 @@ export function requireAdmin(secret: string) {
     if (!header?.startsWith("Bearer ")) {
       return c.json({ error: "Unauthorized" }, 401);
     }
+    let email: string;
     try {
       const payload = await verify(header.slice("Bearer ".length), secret, "HS256");
-      c.set("adminEmail", String(payload.sub));
-      await next();
+      if (typeof payload.sub !== "string") return c.json({ error: "Unauthorized" }, 401);
+      email = payload.sub;
     } catch {
       return c.json({ error: "Unauthorized" }, 401);
     }
+    c.set("adminEmail", email);
+    await next();
   };
 }

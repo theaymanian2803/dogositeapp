@@ -33,6 +33,8 @@ export function createApp(db: Client, config: AppConfig): Hono {
     return c.json({ error: "Internal error" }, 500);
   });
 
+  app.notFound((c) => c.json({ error: "Not found" }, 404));
+
   app.get("/health", (c) => c.json({ ok: true }));
 
   registerCatalogRoutes(app, db);
