@@ -157,6 +157,13 @@ export const fr: Dict = {
   "product.reviewBody":
     "Qu'avez-vous aimé ou pas ? Comment cela a-t-il fonctionné pour votre animal ?",
   "product.imageLink": ".ou collez un lien d'image",
+  "product.addedToCart": "{name} ajouté au panier",
+  "product.writeReview": "Écrire un avis",
+  "product.reviewName": "Votre nom",
+  "product.submitReview": "Envoyer l'avis",
+  "product.reviewPending": "Votre avis est en attente d'approbation",
+  "product.reviewError": "Impossible d'envoyer votre avis",
+  "product.noReviews": "Aucun avis pour l'instant — soyez le premier à donner votre avis",
   "category.empty": "Aucun produit dans cette catégorie pour le moment.",
   "lang.label": "Langue",
   "i18n.restartTitle": "Redémarrage requis",
