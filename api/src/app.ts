@@ -7,6 +7,7 @@ import { registerOrderRoutes } from "./routes/orders";
 import { registerReviewRoutes } from "./routes/reviews";
 import { registerAdminAuthRoutes } from "./routes/admin-auth";
 import { registerAdminOrderRoutes } from "./routes/admin-orders";
+import { registerAdminProductRoutes } from "./routes/admin-products";
 
 export type AppConfig = {
   jwtSecret: string;
@@ -35,6 +36,7 @@ export function createApp(db: Client, config: AppConfig): Hono {
   registerReviewRoutes(app, db);
   registerAdminAuthRoutes(app, db, config);
   registerAdminOrderRoutes(app, db, config);
+  registerAdminProductRoutes(app, db, config);
 
   return app;
 }
