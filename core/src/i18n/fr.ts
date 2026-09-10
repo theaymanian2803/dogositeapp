@@ -136,6 +136,7 @@ export const fr: Dict = {
   "shop.resultsFor": "Résultats de recherche pour",
   "shop.noCategories": "Aucune catégorie.",
   "shop.noProducts": "Aucun produit trouvé",
+  "shop.noResults": "Aucun produit trouvé",
   "shop.clearFilters": "Effacer les filtres",
   "shop.prev": "Page précédente",
   "shop.next": "Page suivante",

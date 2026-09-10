@@ -133,6 +133,7 @@ export const ar: Dict = {
   "shop.resultsFor": "نتائج البحث عن",
   "shop.noCategories": "لا توجد تصنيفات.",
   "shop.noProducts": "لا توجد منتجات",
+  "shop.noResults": "لم يتم العثور على منتجات",
   "shop.clearFilters": "مسح التصفية",
   "shop.prev": "الصفحة السابقة",
   "shop.next": "الصفحة التالية",
