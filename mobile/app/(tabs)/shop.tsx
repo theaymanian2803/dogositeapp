@@ -34,15 +34,7 @@ export default function ShopScreen() {
     });
   }
 
-  const visible = (data ?? []).filter((p) => selected.size === 0 || selected.has(p.category));
-
-  if (isLoading) {
-    return (
-      <Screen>
-        <Loading />
-      </Screen>
-    );
-  }
+const visible = (data ?? []).filter((p) => selected.size === 0 || selected.has(p.category));
 
   return (
     <Screen>
@@ -82,7 +74,9 @@ export default function ShopScreen() {
           );
         })}
       </ScrollView>
-      {visible.length === 0 ? (
+{isLoading ? (
+        <Loading />
+      ) : visible.length === 0 ? (
         <EmptyState message={t("shop.noResults")} />
       ) : (
         <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 12 }}>
