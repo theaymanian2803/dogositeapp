@@ -5,6 +5,7 @@ import { ensureApiTablesOnce } from "./schema";
 import { registerCatalogRoutes } from "./routes/catalog";
 import { registerOrderRoutes } from "./routes/orders";
 import { registerReviewRoutes } from "./routes/reviews";
+import { registerAdminAuthRoutes } from "./routes/admin-auth";
 
 export type AppConfig = {
   jwtSecret: string;
@@ -31,6 +32,7 @@ export function createApp(db: Client, config: AppConfig): Hono {
   registerCatalogRoutes(app, db);
   registerOrderRoutes(app, db);
   registerReviewRoutes(app, db);
+  registerAdminAuthRoutes(app, db, config);
 
   return app;
 }
