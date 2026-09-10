@@ -8,10 +8,11 @@ type Props = {
   placeholder?: string;
   error?: string;
   multiline?: boolean;
+  secureTextEntry?: boolean;
   keyboardType?: "default" | "phone-pad" | "numeric" | "email-address";
 };
 
-export function Input({ label, value, onChangeText, placeholder, error, multiline, keyboardType }: Props) {
+export function Input({ label, value, onChangeText, placeholder, error, multiline, secureTextEntry, keyboardType }: Props) {
   const { colors } = useTheme();
   return (
     <View style={{ gap: 6 }}>
@@ -22,6 +23,7 @@ export function Input({ label, value, onChangeText, placeholder, error, multilin
         placeholder={placeholder}
         placeholderTextColor="#9CA3AF"
         multiline={multiline}
+        secureTextEntry={secureTextEntry}
         keyboardType={keyboardType}
         style={{
           borderWidth: 1,

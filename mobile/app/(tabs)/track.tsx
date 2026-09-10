@@ -249,6 +249,17 @@ export default function TrackScreen() {
           </View>
         </View>
       ) : null}
+
+      <Pressable
+        accessibilityRole="link"
+        accessibilityLabel="Admin"
+        onPress={() => router.push("/admin")}
+        style={{ alignSelf: "center", paddingVertical: 8 }}
+      >
+        <Text style={{ color: colors.foreground, opacity: 0.25, fontSize: 10 }}>
+          {t("nav.admin")}
+        </Text>
+      </Pressable>
     </Screen>
   );
 }
