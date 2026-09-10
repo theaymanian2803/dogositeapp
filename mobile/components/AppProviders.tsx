@@ -5,6 +5,7 @@ import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persi
 import Constants from "expo-constants";
 import type { ReactNode } from "react";
 import type { Lang } from "@petpals/core";
+import { Toaster } from "sonner-native";
 import { CartProvider } from "../lib/cart";
 import { I18nProvider } from "../lib/i18n";
 import { ThemeProvider } from "../theme/theme";
@@ -27,7 +28,10 @@ export function AppProviders({ children }: { children: ReactNode }) {
     <PersistQueryClientProvider client={queryClient} persistOptions={{ persister }}>
       <ThemeProvider>
         <I18nProvider defaultLanguage={defaultLanguage}>
-          <CartProvider>{children}</CartProvider>
+          <CartProvider>
+            {children}
+            <Toaster />
+          </CartProvider>
         </I18nProvider>
       </ThemeProvider>
     </PersistQueryClientProvider>
