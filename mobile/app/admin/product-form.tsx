@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { Pressable, Text, View } from "react-native";
@@ -36,6 +36,7 @@ export default function AdminProductFormScreen() {
   const [picking, setPicking] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [banner, setBanner] = useState<string | null>(null);
+  const saveRef = useRef(false);
 
   useEffect(() => {
     if (!editingProduct) return;
@@ -103,6 +104,8 @@ export default function AdminProductFormScreen() {
     if (Object.keys(nextErrors).length > 0) return;
 
     setBanner(null);
+    if (saveRef.current) return;
+    saveRef.current = true;
     const input: Record<string, unknown> = {
       name: name.trim(),
       description: description.trim(),
@@ -117,6 +120,7 @@ export default function AdminProductFormScreen() {
       else await createProduct.mutateAsync(input);
       router.back();
     } catch (err) {
+      saveRef.current = false;
       setBanner(err instanceof Error ? err.message : t("admin.products.saveError"));
     }
   }

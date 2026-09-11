@@ -41,13 +41,27 @@ export async function setAdminToken(token: string | null): Promise<void> {
   else await SecureStore.deleteItemAsync(ADMIN_TOKEN_KEY);
 }
 
+let authExpiredHandler: (() => void) | null = null;
+
+export function onAuthExpired(handler: (() => void) | null): void {
+  authExpiredHandler = handler;
+}
+
 export async function adminFetch<T>(path: string, init?: RequestInit): Promise<T> {
   const token = await getAdminToken();
-  return apiFetch<T>(path, {
+  const res = await fetch(buildUrl(apiBaseUrl(), path), {
     ...init,
     headers: {
+      "Content-Type": "application/json",
       ...(init?.headers ?? {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
   });
+  if (res.status === 401 && token) {
+    await setAdminToken(null).catch(() => {});
+    authExpiredHandler?.();
+  }
+  if (!res.ok) throw new Error(await parseError(res));
+  if (res.status === 204) return undefined as T;
+  return (await res.json()) as T;
 }

@@ -60,6 +60,7 @@ export function cartReducer(state: CartState, action: CartAction): CartState {
 const STORAGE_KEY = "petpals_cart";
 
 type CartValue = CartState & {
+  hydrated: boolean;
   add: (item: Omit<CartItem, "qty">, qty?: number) => void;
   remove: (id: string) => void;
   setQty: (id: string, qty: number) => void;
@@ -68,6 +69,7 @@ type CartValue = CartState & {
 
 const CartContext = createContext<CartValue>({
   ...initialCart,
+  hydrated: false,
   add: () => {},
   remove: () => {},
   setQty: () => {},
@@ -76,21 +78,27 @@ const CartContext = createContext<CartValue>({
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<CartState>(initialCart);
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    AsyncStorage.getItem(STORAGE_KEY).then((raw) => {
-      if (!raw) return;
-      try {
-        setState(withTotals(JSON.parse(raw) as CartItem[]));
-      } catch {
-        /* ignore */
-      }
-    });
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((raw) => {
+        if (raw) {
+          try {
+            setState(withTotals(JSON.parse(raw) as CartItem[]));
+          } catch {
+            /* ignore */
+          }
+        }
+      })
+      .catch(() => {})
+      .finally(() => setHydrated(true));
   }, []);
 
   useEffect(() => {
+    if (!hydrated) return;
     AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(state.items)).catch(() => {});
-  }, [state.items]);
+  }, [state.items, hydrated]);
 
   const add = useCallback(
     (item: Omit<CartItem, "qty">, qty?: number) =>
@@ -105,8 +113,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const clear = useCallback(() => setState((s) => cartReducer(s, { type: "clear" })), []);
 
   const value = useMemo(
-    () => ({ ...state, add, remove, setQty, clear }),
-    [state, add, remove, setQty, clear],
+    () => ({ ...state, hydrated, add, remove, setQty, clear }),
+    [state, hydrated, add, remove, setQty, clear],
   );
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;

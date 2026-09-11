@@ -27,14 +27,16 @@ export default function CheckoutScreen() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitError, setSubmitError] = useState("");
 
+  const threshold = Number(settings?.free_shipping_threshold);
+  const fee = Number(settings?.shipping_fee);
   const shipping = shippingFor(subtotal, {
-    threshold: Number(settings?.free_shipping_threshold) || FREE_SHIPPING_THRESHOLD,
-    fee: Number(settings?.shipping_fee) || SHIPPING_FEE,
+    threshold: Number.isFinite(threshold) ? threshold : FREE_SHIPPING_THRESHOLD,
+    fee: Number.isFinite(fee) ? fee : SHIPPING_FEE,
   });
   const total = subtotal + shipping;
 
   useEffect(() => {
-    if (items.length === 0) router.replace("/cart");
+    if (items.length === 0 && !submittedRef.current) router.replace("/cart");
   }, [items.length]);
 
   if (items.length === 0) return <Screen>{null}</Screen>;

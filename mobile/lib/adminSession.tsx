@@ -6,7 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { adminFetch, getAdminToken, setAdminToken } from "./api";
+import { adminFetch, getAdminToken, onAuthExpired, setAdminToken } from "./api";
 
 export function parseLoginResponse(value: unknown): { token: string; email: string } | null {
   if (!value || typeof value !== "object") return null;
@@ -46,6 +46,11 @@ export function AdminSessionProvider({ children }: { children: ReactNode }) {
       }
       setReady(true);
     })();
+  }, []);
+
+  useEffect(() => {
+    onAuthExpired(() => setEmail(null));
+    return () => onAuthExpired(null);
   }, []);
 
   const signIn = useCallback(async (loginEmail: string, password: string) => {

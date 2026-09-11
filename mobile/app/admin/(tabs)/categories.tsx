@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { FlatList, Pressable, RefreshControl, Text, TextInput, View } from "react-native";
 import type { Category } from "@petpals/core";
 import { Card } from "../../../components/ui/Card";
@@ -50,6 +50,7 @@ export default function AdminCategoriesScreen() {
   const [name, setName] = useState("");
   const [deleteTarget, setDeleteTarget] = useState<Category | null>(null);
   const [banner, setBanner] = useState<string | null>(null);
+  const addRef = useRef(false);
 
   const { data, isLoading, isRefetching, isError, refetch } = useAdminCategories();
   const createCategory = useCreateCategory();
@@ -60,10 +61,16 @@ export default function AdminCategoriesScreen() {
   const canAdd = trimmed.length > 0 && !createCategory.isPending;
 
   function handleAdd() {
-    if (!canAdd) return;
+    if (!canAdd || addRef.current) return;
+    addRef.current = true;
     setBanner(null);
     setName("");
-    createCategory.mutate(trimmed, { onError: () => setBanner(t("admin.categories.addError")) });
+    createCategory.mutate(trimmed, {
+      onError: () => setBanner(t("admin.categories.addError")),
+      onSettled: () => {
+        addRef.current = false;
+      },
+    });
   }
 
   function handleDelete() {

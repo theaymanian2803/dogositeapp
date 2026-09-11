@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Image } from "expo-image";
 import { router, useLocalSearchParams } from "expo-router";
 import { Minus, Plus, Star } from "lucide-react-native";
@@ -12,7 +12,7 @@ import { PriceText } from "../../components/ui/PriceText";
 import { Screen } from "../../components/ui/Screen";
 import { useCart } from "../../lib/cart";
 import { useI18n } from "../../lib/i18n";
-import { useCreateReview, useProduct } from "../../lib/queries";
+import { useCategories, useCreateReview, useProduct } from "../../lib/queries";
 import { useTheme } from "../../theme/theme";
 
 function parseImages(raw: string | null): string[] {
@@ -48,6 +48,8 @@ export default function ProductScreen() {
   const { width } = useWindowDimensions();
   const { add } = useCart();
   const createReview = useCreateReview();
+  const { data: categories } = useCategories();
+  const reviewRef = useRef(false);
   const [qty, setQty] = useState(1);
   const [name, setName] = useState("");
   const [rating, setRating] = useState(5);
@@ -92,7 +94,8 @@ export default function ProductScreen() {
 
   function handleSubmitReview() {
     const r = Math.min(5, Math.max(1, Math.round(rating)));
-    if (!name.trim() || !body.trim()) return;
+    if (!name.trim() || !body.trim() || reviewRef.current) return;
+    reviewRef.current = true;
     createReview.mutate(
       {
         product_id: product.id,
@@ -110,6 +113,9 @@ export default function ProductScreen() {
           setBody("");
         },
         onError: (err) => toast.error(err instanceof Error ? err.message : t("product.reviewError")),
+        onSettled: () => {
+          reviewRef.current = false;
+        },
       },
     );
   }
@@ -141,7 +147,7 @@ export default function ProductScreen() {
 
       <View style={{ gap: 8 }}>
         <Text style={{ color: colors.accent, fontSize: 12, fontWeight: "600", textTransform: "uppercase" }}>
-          {product.category}
+          {categories?.find((c) => c.slug === product.category)?.name ?? product.category}
         </Text>
         <Text style={{ color: colors.foreground, fontSize: 22, fontWeight: "700" }}>{product.name}</Text>
         <PriceText value={product.price} size={22} />

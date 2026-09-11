@@ -13,16 +13,20 @@ import { useSettings } from "../../lib/queries";
 import { useTheme } from "../../theme/theme";
 
 export default function CartScreen() {
-  const { items, subtotal, setQty, remove } = useCart();
+  const { items, subtotal, hydrated, setQty, remove } = useCart();
   const { data: settings } = useSettings();
   const { t } = useI18n();
   const { colors } = useTheme();
 
+  const threshold = Number(settings?.free_shipping_threshold);
+  const fee = Number(settings?.shipping_fee);
   const shipping = shippingFor(subtotal, {
-    threshold: Number(settings?.free_shipping_threshold) || FREE_SHIPPING_THRESHOLD,
-    fee: Number(settings?.shipping_fee) || SHIPPING_FEE,
+    threshold: Number.isFinite(threshold) ? threshold : FREE_SHIPPING_THRESHOLD,
+    fee: Number.isFinite(fee) ? fee : SHIPPING_FEE,
   });
   const total = subtotal + shipping;
+
+  if (!hydrated) return <Screen>{null}</Screen>;
 
   return (
     <Screen>

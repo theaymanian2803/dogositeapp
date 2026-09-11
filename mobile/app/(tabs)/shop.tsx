@@ -22,7 +22,7 @@ export default function ShopScreen() {
     return () => clearTimeout(id);
   }, [query]);
 
-  const { data, isLoading } = useProducts({ q: debouncedQuery || undefined });
+const { data, isLoading, isError } = useProducts({ q: debouncedQuery || undefined });
   const { data: categories } = useCategories();
 
   function toggleCategory(slug: string) {
@@ -76,6 +76,8 @@ const visible = (data ?? []).filter((p) => selected.size === 0 || selected.has(p
       </ScrollView>
 {isLoading ? (
         <Loading />
+      ) : isError ? (
+        <EmptyState message={t("shop.loadError")} />
       ) : visible.length === 0 ? (
         <EmptyState message={t("shop.noResults")} />
       ) : (

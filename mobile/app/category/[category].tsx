@@ -11,7 +11,7 @@ import { useTheme } from "../../theme/theme";
 
 export default function CategoryScreen() {
   const { category } = useLocalSearchParams<{ category: string }>();
-  const { data, isLoading } = useProducts({ category });
+  const { data, isLoading, isError } = useProducts({ category });
   const { data: categories } = useCategories();
   const { t } = useI18n();
   const { colors } = useTheme();
@@ -23,6 +23,8 @@ export default function CategoryScreen() {
       <Text style={{ color: colors.foreground, fontSize: 22, fontWeight: "700" }}>{title}</Text>
       {isLoading ? (
         <Loading />
+      ) : isError ? (
+        <EmptyState message={t("category.loadError")} />
       ) : !data?.length ? (
         <EmptyState message={t("category.empty")} />
       ) : (

@@ -32,7 +32,7 @@ const config: ExpoConfig = {
   experiments: { typedRoutes: true },
   extra: {
     client: client.slug,
-    apiUrl: client.apiUrl,
+    apiUrl: process.env.EXPO_PUBLIC_API_URL ?? client.apiUrl,
     defaultLanguage: client.defaultLanguage,
     currency: client.currency,
     eas: { projectId: process.env.EAS_PROJECT_ID },

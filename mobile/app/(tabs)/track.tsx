@@ -158,6 +158,7 @@ export default function TrackScreen() {
   const { colors } = useTheme();
   const [phone, setPhone] = useState("");
   const [searched, setSearched] = useState("");
+  const [showHint, setShowHint] = useState(false);
 
   useEffect(() => {
     AsyncStorage.getItem("petpals_last_phone")
@@ -170,11 +171,17 @@ export default function TrackScreen() {
   const { data, isFetching, isError } = useTrackOrders(searched);
   const orders = data ?? [];
   const searchedSomething = searched.length > 0;
-  const notFound = searchedSomething && (isError || (data !== undefined && orders.length === 0));
+  const loadFailed = searchedSomething && isError;
+  const notFound = searchedSomething && !isError && data !== undefined && orders.length === 0;
 
   function handleSearch() {
     const q = phone.trim();
     if (!q) return;
+    if (q.length < 4) {
+      setShowHint(true);
+      return;
+    }
+    setShowHint(false);
     setSearched(q);
   }
 
@@ -204,6 +211,32 @@ export default function TrackScreen() {
         <Text style={{ textAlign: "center", color: colors.foreground, opacity: 0.6, fontSize: 13 }}>
           {t("track.searching")}
         </Text>
+      ) : null}
+
+      {showHint ? (
+        <Text style={{ textAlign: "center", color: "#DC2626", fontSize: 12 }}>
+          {t("track.shortPhone")}
+        </Text>
+      ) : null}
+
+      {!isFetching && loadFailed ? (
+        <View
+          style={{
+            backgroundColor: colors.card,
+            borderColor: colors.border,
+            borderWidth: 1,
+            borderRadius: 12,
+            padding: 24,
+            gap: 8,
+          }}
+        >
+          <Text style={{ color: colors.foreground, fontWeight: "600", textAlign: "center" }}>
+            {t("track.loadError")}
+          </Text>
+          <Text style={{ color: colors.foreground, opacity: 0.6, fontSize: 12, textAlign: "center" }}>
+            {t("track.loadErrorHint")}
+          </Text>
+        </View>
       ) : null}
 
       {!isFetching && notFound ? (
