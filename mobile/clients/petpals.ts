@@ -25,7 +25,7 @@ export const petpals: ClientConfig = {
   scheme: "petpals",
   iosBundleId: "com.petpals.app",
   androidPackage: "com.petpals.app",
-  apiUrl: "http://localhost:8787",
+  apiUrl: "http://192.168.100.41:8787",
   defaultLanguage: "fr",
   currency: "MAD",
   colors: {

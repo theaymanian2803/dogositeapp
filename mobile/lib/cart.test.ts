@@ -1,3 +1,7 @@
+jest.mock("@react-native-async-storage/async-storage", () =>
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
+);
+
 import { cartReducer, initialCart } from "./cart";
 
 const item = { id: "p1", name: "Food", slug: "food", price: 10, image_url: "i" };

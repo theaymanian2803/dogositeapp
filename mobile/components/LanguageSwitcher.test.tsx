@@ -19,7 +19,7 @@ jest.mock("../theme/theme", () => ({
 }));
 
 jest.mock("@react-native-async-storage/async-storage", () =>
-  require("@react-native-async-storage/async-storage/jest"),
+  require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
 );
 
 describe("LanguageSwitcher", () => {

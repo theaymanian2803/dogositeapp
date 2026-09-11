@@ -14,6 +14,7 @@ Notifications.setNotificationHandler({
 });
 
 export async function registerForPushNotifications(): Promise<void> {
+  if (Constants.executionEnvironment === "storeClient") return;
   if (!Device.isDevice) return;
 
   const existing = await Notifications.getPermissionsAsync();
