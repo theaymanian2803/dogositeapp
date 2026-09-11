@@ -11,3 +11,4 @@ dist
 api/api/index.js
 !.env.example
 web/
+.expo-diagnose
